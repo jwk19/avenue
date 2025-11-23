@@ -75,7 +75,12 @@ export default function ContactPage() {
             <Button href="tel:+254711500451" variant="secondary" size="lg">
               Speak to an Advisor
             </Button>
-            <Button onClick={() => setIsModalOpen(true)} variant="outline" size="lg" className="bg-white/10 text-white border-white/30">
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              variant="outline"
+              size="lg"
+              className="border-white/30 bg-white/10 text-white hover:bg-white/80 hover:text-[#071427]"
+            >
               Find Services for Me
             </Button>
           </div>

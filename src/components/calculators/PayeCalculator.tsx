@@ -190,7 +190,7 @@ const PayeCalculator = ({ variant = 'full', className = '' }: PayeCalculatorProp
               value={grossSalary}
               onChange={(event) => setGrossSalary(event.target.value)}
               placeholder="e.g., 120000"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-primary focus:outline-none"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none"
             />
           </div>
 
@@ -206,7 +206,7 @@ const PayeCalculator = ({ variant = 'full', className = '' }: PayeCalculatorProp
                   setBenefits((prev) => ({ ...prev, housing: event.target.value }))
                 }
                 placeholder="0"
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none"
               />
             </div>
             <div>
@@ -220,7 +220,7 @@ const PayeCalculator = ({ variant = 'full', className = '' }: PayeCalculatorProp
                   setBenefits((prev) => ({ ...prev, medical: event.target.value }))
                 }
                 placeholder="0"
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none"
               />
             </div>
           </div>
@@ -236,7 +236,7 @@ const PayeCalculator = ({ variant = 'full', className = '' }: PayeCalculatorProp
                 setBenefits((prev) => ({ ...prev, other: event.target.value }))
               }
               placeholder="0"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2 text-sm focus:border-primary focus:outline-none"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none"
             />
           </div>
         </div>
