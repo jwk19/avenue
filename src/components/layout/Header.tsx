@@ -101,10 +101,10 @@ export default function Header() {
               </div>
             ))}
             <Link 
-              href="/contact" 
+              href="/calculators/paye" 
               className="bg-secondary hover:bg-secondary-dark text-white px-6 py-2 rounded-md font-medium transition-colors"
             >
-              Get a Quote
+              PAYE Calculator
             </Link>
           </div>
 
@@ -148,6 +148,15 @@ export default function Header() {
                   )}
                 </div>
               ))}
+            </div>
+            <div className="px-3 pb-3">
+              <Link
+                href="/calculators/paye"
+                className="block w-full rounded-md bg-secondary px-4 py-2 text-center text-white font-semibold"
+                onClick={() => setIsOpen(false)}
+              >
+                PAYE Calculator
+              </Link>
             </div>
           </div>
         )}

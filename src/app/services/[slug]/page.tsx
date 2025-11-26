@@ -1,21 +1,24 @@
 import Button from "@/components/ui/Button";
 import { getServiceBySlug, services } from "@/data/services";
+import { getServicePageContent, standardCtaContent, trustIndicators } from "@/data/servicePageContent";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface ServicePageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
 }
 
-export function generateMetadata({ params }: ServicePageProps): Metadata {
-  const service = getServiceBySlug(params.slug);
+export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+  const serviceContent = getServicePageContent(slug);
 
-  if (!service) {
+  if (!service || !serviceContent) {
     return {
       title: "Service not found | Avenue Tax & Audit",
     };
@@ -23,14 +26,16 @@ export function generateMetadata({ params }: ServicePageProps): Metadata {
 
   return {
     title: `${service.title} | Avenue Tax & Audit`,
-    description: service.shortDescription,
+    description: serviceContent.hero.description,
   };
 }
 
-export default function ServiceDetailPage({ params }: ServicePageProps) {
-  const service = getServiceBySlug(params.slug);
+export default async function ServiceDetailPage({ params }: ServicePageProps) {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+  const serviceContent = getServicePageContent(slug);
 
-  if (!service) {
+  if (!service || !serviceContent) {
     notFound();
   }
 
@@ -45,104 +50,74 @@ export default function ServiceDetailPage({ params }: ServicePageProps) {
         <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-white/70">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-1 uppercase tracking-[0.4em]">
-              {service.hero.eyebrow}
+              {serviceContent.hero.eyebrow}
             </span>
             <Link href="/services" className="inline-flex items-center gap-2 text-white/80 transition hover:text-white">
               <span>← Back to Services</span>
             </Link>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-            <div>
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 text-white">
-                <Icon className="h-8 w-8" />
-              </div>
-              <h1 className="text-4xl font-bold leading-tight sm:text-5xl">{service.title}</h1>
-              <p className="mt-6 text-lg text-white/80">{service.hero.description}</p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Button href="/contact" variant="secondary" size="lg" className="bg-white/15 text-white hover:bg-white/25">
-                  Book a Consultation
-                </Button>
-                <Button href="/services" variant="outline" size="lg" className="border-white/40 bg-transparent text-white hover:bg-white/10">
-                  Explore all services
-                </Button>
-              </div>
+          <div className="max-w-3xl">
+            <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 text-white">
+              <Icon className="h-8 w-8" />
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-              <h2 className="text-sm uppercase tracking-[0.4em] text-white/70">Impact Metrics</h2>
-              <div className="mt-6 grid gap-6 sm:grid-cols-3 lg:grid-cols-1">
-                {service.hero.highlights.map((highlight) => (
-                  <div key={highlight.label} className="rounded-2xl bg-white/10 p-4">
-                    <p className="text-3xl font-semibold text-white">{highlight.value}</p>
-                    <p className="text-white/70">{highlight.label}</p>
-                    {highlight.detail && <p className="text-sm text-white/60">{highlight.detail}</p>}
-                  </div>
-                ))}
-              </div>
+            <h1 className="text-4xl font-bold leading-tight sm:text-5xl">{serviceContent.hero.title}</h1>
+            <p className="mt-6 text-lg text-white/80">{serviceContent.hero.description}</p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Button href="/contact" variant="secondary" size="lg" className="bg-white/15 text-white hover:bg-white/25">
+                Book a Consultation
+              </Button>
+              <Button href="/services" variant="outline" size="lg" className="border-white/40 bg-transparent text-white hover:bg-white/10">
+                Explore all services
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="-mt-10 pb-4">
+      <section className="-mt-10 pb-6">
         <div className="mx-auto max-w-6xl rounded-[2rem] bg-white px-4 py-12 shadow-2xl sm:px-6 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-3">
-            <div className="space-y-6 lg:col-span-1">
-              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary">
-                Why teams need this
-              </p>
-              <h2 className="text-3xl font-semibold text-[#071427]">Pain points we eliminate</h2>
-              <p className="text-base text-gray-600">Built from dozens of Kenyan finance teams facing the same hurdles.</p>
-            </div>
-            <div className="grid gap-6 lg:col-span-2">
-              {service.painPoints.map((point) => (
-                <div key={point} className="rounded-2xl border border-gray-100 bg-gray-50/70 p-6 text-gray-800">
-                  <p className="text-lg">{point}</p>
-                </div>
+          <div className="space-y-10">
+            <div className="space-y-4">
+              {serviceContent.overview.map((paragraph) => (
+                <p key={paragraph} className="text-lg text-gray-700">
+                  {paragraph}
+                </p>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary">What we focus on</p>
-              <h2 className="mt-3 text-3xl font-semibold text-[#071427]">Engagement pillars</h2>
-            </div>
-            <p className="max-w-2xl text-base text-gray-600">
-              Every engagement is delivered by a pod of specialists with clear swim lanes and measurable outcomes.
-            </p>
-          </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {service.focusAreas.map((area) => (
-              <div key={area.title} className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-                <h3 className="text-xl font-semibold text-[#071427]">{area.title}</h3>
-                <p className="mt-3 text-gray-600">{area.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            {serviceContent.sections.map((section) => (
+              <div key={section.title} className="rounded-3xl border border-gray-100 bg-gray-50/70 p-6">
+                <div className="space-y-4">
+                  <div>
+                    <h2 className="text-2xl font-semibold text-[#071427]">{section.title}</h2>
+                    {section.description && <p className="mt-3 text-base text-gray-600">{section.description}</p>}
+                  </div>
 
-      <section className="bg-[#0a1429] py-16 text-white">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary-light">What you receive</p>
-              <h2 className="mt-3 text-3xl font-semibold">Signature deliverables</h2>
-            </div>
-            <p className="max-w-2xl text-base text-white/70">
-              We document everything—ensuring leadership, regulators, and auditors have the proof they need.
-            </p>
-          </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {service.deliverables.map((deliverable) => (
-              <div key={deliverable.title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                <h3 className="text-xl font-semibold">{deliverable.title}</h3>
-                <p className="mt-3 text-white/70">{deliverable.description}</p>
+                  {section.items && (
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      {section.items.map((item) => (
+                        <div key={item.title} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                          <h3 className="text-lg font-semibold text-[#071427]">{item.title}</h3>
+                          <p className="mt-2 text-gray-600">{item.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {section.bullets && (
+                    <ul className="mt-4 space-y-3 text-base text-gray-700">
+                      {section.bullets.map((bullet) => (
+                        <li key={bullet} className="flex items-start gap-3">
+                          <span className="mt-2 h-2 w-2 rounded-full bg-secondary" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {section.note && <p className="mt-4 text-sm font-medium text-gray-600">{section.note}</p>}
+                </div>
               </div>
             ))}
           </div>
@@ -150,44 +125,33 @@ export default function ServiceDetailPage({ params }: ServicePageProps) {
       </section>
 
       <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary">How we work together</p>
-              <h2 className="mt-3 text-3xl font-semibold text-[#071427]">Our delivery rhythm</h2>
-            </div>
-            <p className="max-w-2xl text-base text-gray-600">
-              Transparent milestones with artefacts at every step keep stakeholders confident and informed.
-            </p>
+        <div className="mx-auto max-w-5xl rounded-[2rem] border border-gray-200 bg-white px-8 py-12 text-center shadow-2xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary">{standardCtaContent.eyebrow}</p>
+          <h2 className="mt-4 text-3xl font-semibold text-[#071427]">{standardCtaContent.title}</h2>
+          <p className="mt-4 text-lg text-gray-600">{standardCtaContent.description}</p>
+          <span className="mt-6 inline-flex items-center justify-center rounded-full bg-secondary/10 px-4 py-1 text-sm font-semibold text-secondary">
+            {standardCtaContent.badge}
+          </span>
+          <p className="mt-4 text-base text-gray-600">{standardCtaContent.body}</p>
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button href="/contact" size="lg">
+              Schedule a Consultation
+            </Button>
           </div>
-          <ol className="mt-10 space-y-6">
-            {service.process.map((step, index) => (
-              <li key={step.title} className="flex flex-col gap-4 rounded-3xl border border-gray-100 bg-white/80 p-6 shadow-sm md:flex-row md:items-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary/15 text-lg font-semibold text-secondary">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-[#071427]">{step.title}</h3>
-                  <p className="mt-2 text-gray-600">{step.description}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 
       <section className="pb-20">
-        <div className="mx-auto max-w-4xl rounded-[2rem] border border-gray-100 bg-white p-10 text-center shadow-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary">Next step</p>
-          <h2 className="mt-4 text-3xl font-semibold text-[#071427]">{service.cta.title}</h2>
-          <p className="mt-4 text-lg text-gray-600">{service.cta.description}</p>
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button href="/contact" size="lg">
-              Talk to our team
-            </Button>
-            <Button href="/services" variant="outline" size="lg" className="border-gray-200">
-              Browse other services
-            </Button>
+        <div className="mx-auto max-w-6xl rounded-[2rem] border border-gray-100 bg-white px-8 py-12 shadow-2xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-secondary">Trust Indicators</p>
+          <h2 className="mt-4 text-3xl font-semibold text-[#071427]">Why Kenyan Businesses Trust Avenue Tax Audit Associates</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {trustIndicators.map((indicator) => (
+              <div key={indicator} className="flex items-start gap-3 rounded-2xl bg-gray-50 p-4">
+                <span className="mt-2 h-2 w-2 rounded-full bg-secondary" />
+                <p className="text-base text-gray-700">{indicator}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

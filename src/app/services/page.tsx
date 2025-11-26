@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   FaCalculator,
@@ -7,6 +8,12 @@ import {
   FaBalanceScale,
   FaUserShield,
 } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Tax, Audit, VAT & Advisory Services in Kenya",
+  description:
+    "Browse Avenue Tax Audit Associates' specialized services covering tax agency, advisory, VAT filing, audit, bookkeeping, and risk compliance for Kenyan organizations.",
+};
 
 const services = [
   {

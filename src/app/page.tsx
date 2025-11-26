@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import Services from "@/components/sections/Services";
 import ServiceDiscovery from "@/components/sections/ServiceDiscovery";
@@ -6,6 +7,12 @@ import Testimonials from "@/components/sections/Testimonials";
 import CallToAction from "@/components/sections/CallToAction";
 import { Stat } from "@/components/ui/Stats";
 import { FaUserTie, FaSmile, FaFileInvoiceDollar, FaGlobeAfrica } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Tax Agency & Audit Firm for Kenyan Businesses",
+  description:
+    "Explore Avenue Tax Audit Associates' full suite of tax agency, audit, advisory, VAT, and bookkeeping services trusted by companies across Kenya.",
+};
 
 const highlightStats = [
   {

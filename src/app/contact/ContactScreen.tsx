@@ -1,7 +1,5 @@
 'use client';
 
-import type { Metadata } from 'next';
-
 import { FormEvent, useState } from 'react';
 import ServiceDiscovery from '@/components/sections/ServiceDiscovery';
 import Button from '@/components/ui/Button';
@@ -14,12 +12,6 @@ import {
   FiMessageSquare,
   FiSend,
 } from 'react-icons/fi';
-
-export const metadata: Metadata = {
-  title: 'Contact Avenue Tax Audit Associates | Talk to a Tax Expert',
-  description:
-    'Reach Avenue Tax Audit Associates for tax compliance, audit, VAT, bookkeeping, and advisory inquiries via phone, email, or our consultation form.',
-};
 
 const contactChannels = [
   {
@@ -51,7 +43,7 @@ const responseHighlights = [
   'Access to eTIMS and bookkeeping specialists',
 ];
 
-export default function ContactPage() {
+export default function ContactScreen() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -75,8 +67,7 @@ export default function ContactPage() {
               Talk to a dedicated tax & audit team that scales with you.
             </h1>
             <p className="mt-6 text-lg text-white/80">
-              Whether you need urgent compliance support, strategic advisory, or a full finance partner,
-              we're one conversation away.
+              Whether you need urgent compliance support, strategic advisory, or a full finance partner, we're one conversation away.
             </p>
           </div>
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -236,8 +227,7 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3 rounded-2xl bg-primary/5 p-4 text-sm text-gray-600">
                   <FiSend className="mt-1 h-5 w-5 text-primary" />
                   <p>
-                    By submitting, you agree to our privacy policy and allow our client services team to contact you via email,
-                    phone, or WhatsApp.
+                    By submitting, you agree to our privacy policy and allow our client services team to contact you via email, phone, or WhatsApp.
                   </p>
                 </div>
 

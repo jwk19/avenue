@@ -1,7 +1,14 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useMemo, useState } from "react";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Tax, Audit & Compliance FAQs for Kenyan Businesses",
+  description:
+    "Get answers to the most common questions about KRA registrations, VAT, PAYE, bookkeeping, audits, and penalties from Avenue Tax Audit Associates.",
+};
 
 type FaqCategory = {
   id: string;
